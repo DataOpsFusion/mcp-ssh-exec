@@ -1,0 +1,23 @@
+services:
+  ssh-exec:
+    image: docker-local.homeserverlocal.com/ssh-exec/ssh-exec:latest
+    container_name: ssh-exec
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      HOSTS_CONFIG: /app/hosts.yaml
+      SSH_KNOWN_HOSTS: /app/known_hosts
+      PORT: "8890"
+    ports:
+      - "8890:8890"
+    volumes:
+      - ./hosts.yaml:/app/hosts.yaml:ro
+      - ./known_hosts:/app/known_hosts:ro
+      - /home/devops/.ssh:/ssh-keys:ro
+    healthcheck:
+      test: ["CMD", "python", "-c", "import socket; s = socket.create_connection(('127.0.0.1', 8890), 2); s.close()"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
