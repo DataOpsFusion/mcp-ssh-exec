@@ -88,7 +88,7 @@ def _ssh_error(exc: Exception, h: dict) -> str:
     return "ERROR: " + type(exc).__name__ + ": " + str(exc)
 
 
-mcp = FastMCP("ssh-exec", host="0.0.0.0", port=PORT, stateless_http=True)
+mcp = FastMCP("ssh-exec", stateless_http=True)
 
 
 @mcp.tool(annotations={"readOnlyHint": True, "idempotentHint": True})
@@ -333,4 +333,5 @@ def get_job_output(name: str, job_id: str) -> str:
 
 
 if __name__ == "__main__":
-    mcp.run(transport="streamable-http", host="0.0.0.0", port=8080)
+    mcp.run(transport="streamable-http", host="0.0.0.0", port=PORT)
+[exit: 0]
